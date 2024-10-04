@@ -22,11 +22,22 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
-        if (Health <= 0)
+        Movement();
+        Shoot();
+        EnemyUi();
+    }
+
+    void Movement()
+    {
+        if (Time.time >= TimeCheck)
         {
-            Player.GetComponent<PlayerController>().Score += Score;
-            Destroy(gameObject);
+            TimeCheck = Time.time + TimeNextCheck;
+            transform.position = new Vector2(transform.position.x, transform.position.y - 0.5f);
         }
+    }
+
+    void Shoot()
+    {
         RaycastHit2D Hit = Physics2D.Raycast(StartPosition.position, Vector3.down, 1f);
         if (Hit.collider == null)
         {
@@ -38,10 +49,14 @@ public class EnemyController : MonoBehaviour
             }
         }
         Debug.DrawRay(StartPosition.position, Vector3.down);
-        if (Time.time >= TimeCheck)
+    }
+
+    void EnemyUi()
+    {
+        if (Health <= 0)
         {
-            TimeCheck = Time.time + TimeNextCheck;
-            transform.position = new Vector2(transform.position.x, transform.position.y - 0.5f);
+            Player.GetComponent<PlayerController>().Score += Score;
+            Destroy(gameObject);
         }
     }
 }

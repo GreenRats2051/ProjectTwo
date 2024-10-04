@@ -27,6 +27,28 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        Movement();
+        Shoot();
+        PlayerUi();
+    }
+
+    void Movement()
+    {
+        InputAction = Input.GetAxis("Horizontal");
+        Rigidbody.velocity = new Vector2(InputAction * Speed, 0);
+    }
+
+    void Shoot()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            GameObject CurrentBulet = Instantiate(Bullet, StartShoot.position, Quaternion.identity);
+            CurrentBulet.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 5, ForceMode2D.Impulse);
+        }
+    }
+
+    void PlayerUi()
+    {
         IconHealth.sprite = Health[HealthValue];
         if (HealthValue <= 0 && LifeValue != 0)
         {
@@ -40,13 +62,5 @@ public class PlayerController : MonoBehaviour
             Time.timeScale = 0;
         }
         ScoreText.text = Score.ToString();
-        InputAction = Input.GetAxis("Horizontal");
-        Rigidbody.velocity = new Vector2(InputAction * Speed, 0);
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            GameObject CurrentBulet = Instantiate(Bullet, StartShoot.position, Quaternion.identity);
-            CurrentBulet.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 5, ForceMode2D.Impulse);
-        }
-            
     }
 }
